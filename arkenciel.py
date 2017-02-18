@@ -5,14 +5,19 @@ import sys
 import os
 
 
-def print_out(line):
-    line = '\033[34m' + line + '\033[39m'
-    print(line, file=sys.stdout)
+class Colorizer(object):
+    def __init__(self, command, arguments):
+        self.__command = command
+        self.__arguments = arguments
+        self.__state = None
 
+    def process_out(self, line):
+        line = '\033[34m' + line + '\033[39m'
+        print(line, file=sys.stdout)
 
-def print_err(line):
-    line = '\033[31m' + line + '\033[39m'
-    print(line, file=sys.stderr)
+    def process_err(self, line):
+        line = '\033[31m' + line + '\033[39m'
+        print(line, file=sys.stderr)
 
 
 def rollback():
@@ -29,6 +34,8 @@ def main():
     script = sys.argv[0]
     command = sys.argv[1]
     arguments = sys.argv[2:]
+
+    colorizer = Colorizer(command, arguments)
 
     if pid == 0:
         os.close(pipe_read_out)
@@ -47,9 +54,9 @@ def main():
                     line_out = pipe_fd_handle_out.readline()
                     line_err = pipe_fd_handle_err.readline()
                     if line_out:
-                        print_out(line_out[:-1])
+                        colorizer.process_out(line_out[:-1])
                     if line_err:
-                        print_err(line_err[:-1])
+                        colorizer.process_err(line_err[:-1])
                     if not line_out and not line_err:
                         break
                 except KeyboardInterrupt:
