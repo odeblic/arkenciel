@@ -28,9 +28,24 @@ def rollback():
 
 
 def main():
+    if len(sys.argv) < 2:
+        RAINBOW = [5, 1, 3, 2, 6, 4] * 2
+        TITLE = 'ARKENCIEL'
+        splash_screen = str()
+        title = str()
+        for i in range(0, len(TITLE)):
+            title += '\033[3{};1m {}'.format(RAINBOW[i], TITLE[i])
+        splash_screen = '\033[37mWelcome to {}'.format(title)
+        splash_screen += '\n\033[22;37mThis script colorizes the ouput of given command'
+        splash_screen += '\nUsage : {} command [arguments...]'.format(sys.argv[0])
+        print(splash_screen, file=sys.stdout)
+        rollback()
+        return 0
+
     pipe_read_out, pipe_write_out = os.pipe()
     pipe_read_err, pipe_write_err = os.pipe()
     pid = os.fork()
+
     script = sys.argv[0]
     command = sys.argv[1]
     arguments = sys.argv[2:]
