@@ -6,6 +6,7 @@ import os
 
 
 class Colorizer(object):
+
     def __init__(self, command, arguments):
         self.__command = command
         self.__arguments = arguments
@@ -27,19 +28,21 @@ def rollback():
     sys.stdout.flush()
 
 
+def display_usage():
+    RAINBOW = [5, 1, 3, 2, 6, 4] * 2
+    TITLE = 'ARKENCIEL'
+    text = '\033[37mWelcome to '
+    for i in range(0, len(TITLE)):
+        text += '\033[3{};1m {}'.format(RAINBOW[i], TITLE[i])
+    text += '\n\033[22;37mThis script colorizes the ouput of the invoked command'
+    text += '\nUsage : {} command [arguments...]'.format(sys.argv[0])
+    print(text, file=sys.stdout)
+    rollback()
+
+
 def main():
     if len(sys.argv) < 2:
-        RAINBOW = [5, 1, 3, 2, 6, 4] * 2
-        TITLE = 'ARKENCIEL'
-        splash_screen = str()
-        title = str()
-        for i in range(0, len(TITLE)):
-            title += '\033[3{};1m {}'.format(RAINBOW[i], TITLE[i])
-        splash_screen = '\033[37mWelcome to {}'.format(title)
-        splash_screen += '\n\033[22;37mThis script colorizes the ouput of the invoked command'
-        splash_screen += '\nUsage : {} command [arguments...]'.format(sys.argv[0])
-        print(splash_screen, file=sys.stdout)
-        rollback()
+        display_usage()
         return 0
 
     pipe_read_out, pipe_write_out = os.pipe()
