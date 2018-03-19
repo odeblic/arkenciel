@@ -57,7 +57,10 @@ def main():
         os.close(pipe_read_err)
         os.dup2(pipe_write_out, sys.stdout.fileno())
         os.dup2(pipe_write_err, sys.stderr.fileno())
-        os.execvp(command, [command] + arguments)
+        try:
+            os.execvp(command, [command] + arguments)
+        except OSError as e:
+            print('Cannot execute the command "{}": {}'.format(command, e), file=sys.stderr)
     else:
         os.close(pipe_write_out)
         os.close(pipe_write_err)
