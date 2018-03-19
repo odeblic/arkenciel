@@ -36,7 +36,7 @@ def main():
         for i in range(0, len(TITLE)):
             title += '\033[3{};1m {}'.format(RAINBOW[i], TITLE[i])
         splash_screen = '\033[37mWelcome to {}'.format(title)
-        splash_screen += '\n\033[22;37mThis script colorizes the ouput of given command'
+        splash_screen += '\n\033[22;37mThis script colorizes the ouput of the invoked command'
         splash_screen += '\nUsage : {} command [arguments...]'.format(sys.argv[0])
         print(splash_screen, file=sys.stdout)
         rollback()
